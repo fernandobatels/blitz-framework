@@ -15,14 +15,30 @@
 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
-
- * File to router
+ *
+ *
+ * File to internationalization app.
  * 
  * 
- * Default router from https://github.com/bramus/router
+ * You allow make group of data and use in app
+ * 
  */
-
-$this->router->get('/', function (){$this->callController('index');});
-
-
+//Admin
+\blitz\vendor\Bootstrap::$langWords['admin'] = [
+    //pt-br
+    'pt-br' => [
+        'default' => [
+            'dashboard_name' => 'Painel de Controle',
+            'dashboard_subname' => 'Tudo sobre o website',
+            'btn_save'=>'Salvar'
+        ],
+        'pages' => [
+            'pages_name' => 'Páginas',
+            'pages_name_new' => 'Nova Página',
+            'input_title' => 'Título',
+            'input_subtitle' => 'Subtítulo',
+            'input_content' => 'Conteúdo',
+            'input_url' => 'URL',
+        ]
+    ]
+];
