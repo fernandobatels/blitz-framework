@@ -29,10 +29,19 @@ namespace blitz\vendor\core;
  */
 abstract class ModelDatabase extends Model {
 
-    private $conn;
+    private static $conn;
 
     public function __construct() {
-        $this->conn = new \database\DB(\blitz\vendor\Bootstrap::$settings['db']['driver'] . ':host=' . \blitz\vendor\Bootstrap::$settings['db']['host'] . ";dbname=" . \blitz\vendor\Bootstrap::$settings['db']['name'] . ';charset=' . \blitz\vendor\Bootstrap::$settings['db']['charset'], \blitz\vendor\Bootstrap::$settings['db']['user'], \blitz\vendor\Bootstrap::$settings['db']['pass']);
+		if (!isset(self::$conn)) {
+			self::$conn = new \database\DB(
+				\blitz\vendor\Bootstrap::$settings['db']['driver'] .
+				':host=' . \blitz\vendor\Bootstrap::$settings['db']['host'] .
+				";dbname=" . \blitz\vendor\Bootstrap::$settings['db']['name'] .
+				';charset=' . \blitz\vendor\Bootstrap::$settings['db']['charset'],
+				\blitz\vendor\Bootstrap::$settings['db']['user'],
+				\blitz\vendor\Bootstrap::$settings['db']['pass']
+			);
+		}
     }
 
     /**
@@ -52,7 +61,7 @@ abstract class ModelDatabase extends Model {
         if ($specificTable === null) {
             $specificTable = $this->nameTable();
         }
-        $this->conn->insert($specificTable, $data);
+        self::$conn->insert($specificTable, $data);
     }
 
     /**
@@ -66,7 +75,7 @@ abstract class ModelDatabase extends Model {
         if ($specificTable === null) {
             $specificTable = $this->nameTable();
         }
-        $this->conn->update($specificTable, $data, $where, $dataToWhere);
+        self::$conn->update($specificTable, $data, $where, $dataToWhere);
     }
 
     /**
@@ -79,7 +88,7 @@ abstract class ModelDatabase extends Model {
         if ($specificTable === null) {
             $specificTable = $this->nameTable();
         }
-        $this->conn->delete($specificTable, $where, $dataToWhere);
+        self::$conn->delete($specificTable, $where, $dataToWhere);
     }
 
     /**
@@ -94,7 +103,7 @@ abstract class ModelDatabase extends Model {
         if ($specificTable === null) {
             $specificTable = $this->nameTable();
         }
-        $this->conn->save($specificTable, $data, $primaryKey);
+        self::$conn->save($specificTable, $data, $primaryKey);
     }
 
     /**
@@ -108,7 +117,7 @@ abstract class ModelDatabase extends Model {
         if ($specificTable === null) {
             $specificTable = $this->nameTable();
         }
-        return $this->conn->count($specificTable, $where, $dataToWhere);
+        return self::$conn->count($specificTable, $where, $dataToWhere);
     }
 
     /**
@@ -121,7 +130,7 @@ abstract class ModelDatabase extends Model {
         if ($specificTable === null) {
             $specificTable = $this->nameTable();
         }
-        return $this->conn->select($statement)->from($specificTable);
+        return self::$conn->select($statement)->from($specificTable);
     }
 
     /**
@@ -131,7 +140,7 @@ abstract class ModelDatabase extends Model {
      */
     protected function exec($statement) {
 
-        return $this->conn->exec($statement);
+        return self::$conn->exec($statement);
     }
 
     /**
@@ -141,7 +150,7 @@ abstract class ModelDatabase extends Model {
      * @return type
      */
     protected function execQuery($sql) {
-        return $this->conn->execQueryString($sql);
+        return self::$conn->execQueryString($sql);
     }
 
 }

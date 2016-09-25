@@ -25,13 +25,13 @@ namespace blitz\vendor;
  */
 class Bootstrap {
 
-    public static $version = '3.0';
+    public static $version = '3.1';
 
     public function start() {
+		
         $this->loadConfs();
         $this->loadLibs();
         $this->loadCore();
-
         $this->runLang();
         $this->runRouter();
 

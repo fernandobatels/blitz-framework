@@ -19,7 +19,8 @@
 
 \blitz\vendor\Bootstrap::$settings['app'] = [
     'name' => 'Blitz Framework',
-    'author' => 'Fernando Batels <luisfbatels@gmail.com>',
+    'author' => 'Fernando Batels',
+    'author_email' => 'luisfbatels@gmail.com',
     'url' => 'http://localhost/blitz-framework-3.0'
 ];
 
@@ -51,3 +52,10 @@
 \blitz\vendor\Bootstrap::$settings['app_helpers'] = [
         //'MyAdmin'
 ];
+
+
+setlocale(LC_MONETARY,"pt_BR");
+//~ ini_set("display_errors", "1");
+error_reporting(E_ALL);
+//~ error_reporting(0);
+

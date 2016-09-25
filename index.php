@@ -17,10 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//ini_set("display_errors", "1");
-  //      error_reporting(E_ALL);
-
 require './vendor/Bootstrap.php';
+
 blitz\vendor\Bootstrap::$settings['root_src'] = (__DIR__);
 blitz\vendor\Bootstrap::$settings['vendor_src'] = (__DIR__).'/vendor';
 blitz\vendor\Bootstrap::$settings['app_src'] = (__DIR__).'/app';

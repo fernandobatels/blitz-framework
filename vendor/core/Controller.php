@@ -41,10 +41,28 @@ abstract class Controller {
     /**
      * Get data from request
      */
-    protected function inputData() {
-        return $this->inputObj->run(\GUMP::xss_clean($this->inputType));
+    protected function getInputData() {
+        $data = $this->inputObj->run(\GUMP::xss_clean($this->inputType));
+        if ($data === false){
+			return null;
+		}
+		return $data;
     }
-
+    
+    /**
+     * Get human readable error text in an array 
+     */
+    protected function getReadableErrorsInput() {
+        return $this->inputObj->get_readable_errors(false);
+    }
+    
+    /**
+     * Fetch an array of validation errors indexed by the field names
+     */
+    protected function getErrorsInput() {
+        return $this->inputObj->get_errors_array();
+    }
+    
     /**
      * Check if input seted content
      * @return boolean
@@ -211,6 +229,7 @@ abstract class Controller {
             $to = \blitz\vendor\core\helpers\Url::to($to, $params);
         }
         header("Location: {$to}");
+        exit(0);
     }
 
     /**
