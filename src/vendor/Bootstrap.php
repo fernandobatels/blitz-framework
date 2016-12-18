@@ -25,7 +25,7 @@ namespace blitz\vendor;
  */
 class Bootstrap {
 
-    public static $version = '3.1';
+    public static $version = '3.1.1';
 
     public function start() {
 		
@@ -121,7 +121,11 @@ class Bootstrap {
             'pass' => '123',
             'name' => ''
         ],
-        'pages_groups' => [],
+        'groups_views' => [
+			'index'
+        ],
+        'use_http_encoding_gzip' => false,
+        'use_http_output_minify' => false,
         'root_src' => '',
         'timezone' => 'UTC',
         'locale' => 'pt-br',

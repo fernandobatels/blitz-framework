@@ -25,7 +25,9 @@
 ];
 
 
-\blitz\vendor\Bootstrap::$settings['pages_groups'] = [
+\blitz\vendor\Bootstrap::$settings['use_http_encoding_gzip'] = true;
+\blitz\vendor\Bootstrap::$settings['use_http_output_minify'] = true;
+\blitz\vendor\Bootstrap::$settings['groups_views'] = [
     'index',
         //'blog'
         //'admin'

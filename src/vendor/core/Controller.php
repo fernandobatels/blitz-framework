@@ -151,20 +151,39 @@ abstract class Controller {
     /**
      * Response request
      */
-    public static function output($content, $type = 'text/html', $codeHttp = 200) {
+    public static function output($content, $type = 'text/html', $codeHttp = 200, $allowMinify = true) {
+		
+		 if ( \blitz\vendor\Bootstrap::$settings['use_http_encoding_gzip'] && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+            ob_start("ob_gzhandler");
+        } else {
+            ob_start();
+        }
+        
         header('X-Powered-By: Blitz Framework ' . \blitz\vendor\Bootstrap::$version . ' - ' . \blitz\vendor\Bootstrap::$settings['app']['author']);
         header('Expires: max-age=0');
         header('Cache-Control: no-cache, no-store, must-revalidate');
         header('Pragma: no-cache');
         header('Content-Language: ' . \blitz\vendor\Bootstrap::$settings['locale']);
         header('Server: Blitz Framework');
+        
         if ($type !== null) {
             header("Content-type: {$type}; charset=UTF-8");
         }
+        
         header($_SERVER['SERVER_PROTOCOL'] . ' ' . $codeHttp . ' ' . \blitz\vendor\Bootstrap::$settings['http_code_list'][$codeHttp] . ' - Blitz Framework  ' . \blitz\vendor\Bootstrap::$version, true, $codeHttp);
+        
         if ($content !== null) {
+            
+            if ( \blitz\vendor\Bootstrap::$settings['use_http_output_minify'] && $allowMinify) {
+				$content = trim(str_replace(array("\r\n", "\r", "\n", "\t", "  "), '', $content));
+			}
+			
             echo $content;
+            
+            
         }
+        
+        ob_end_flush();
     }
 
     /**
@@ -183,7 +202,7 @@ abstract class Controller {
                 break;
             }
         }
-        self::output(null, $mt);
+        self::output(null, $mt,200,false);
         header("Content-Disposition: {$contentDispositon};{$showName}={$src}");
         header("Content-Length: {$length}");
     }
@@ -224,7 +243,7 @@ abstract class Controller {
      * @param type $code
      */
     public static function outputRedirect($to = 'home', $params = [], $internal = false, $code = 307) {
-        self::output(null, null, $code);
+        self::output(null, null, $code,false);
         if ($internal) {
             $to = \blitz\vendor\core\helpers\Url::to($to, $params);
         }
@@ -237,7 +256,7 @@ abstract class Controller {
      * @param type $data
      */
     protected function outputJson($data = []) {
-        self::output($this->applyToUrl(json_encode($data)), 'application/json');
+        self::output($this->applyToUrl(json_encode($data)), 'application/json', 200, false);
     }
 
     /**
@@ -245,7 +264,7 @@ abstract class Controller {
      * @param type $data
      */
     protected function outputTxt($data = '') {
-        self::output($this->applyToUrl($data), 'text/plain');
+        self::output($this->applyToUrl($data), 'text/plain', 200, false);
     }
 
     /**
@@ -262,14 +281,14 @@ abstract class Controller {
      * @param type $page
      * @param type $data
      */
-    protected function outputPage($page = 'home', $data = []) {
+    protected function outputPage($page = 'home', $data = [], $codeHttp = 200, $allowMinify = true) {
         $templates = new \League\Plates\Engine(\blitz\vendor\Bootstrap::$settings['app_src'] . '/views/templates');
 
         $templates->loadExtension(new \League\Plates\Extension\Asset(\blitz\vendor\Bootstrap::$settings['app_src'] . '/views/assets', true));
-        foreach (\blitz\vendor\Bootstrap::$settings['pages_groups'] as $key) {
+        foreach (\blitz\vendor\Bootstrap::$settings['groups_views'] as $key) {
             $templates->addFolder($key, \blitz\vendor\Bootstrap::$settings['app_src'] . '/views/pages/' . $key . '/');
         }
-        self::output($this->applyToUrl($templates->render($page, $data)));
+        self::output($this->applyToUrl($templates->render($page, $data)),'text/html', $codeHttp, $allowMinify);
     }
 
     public function actionIndex() {
