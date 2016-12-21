@@ -26,11 +26,23 @@ namespace blitz\vendor\core\helpers;
 class Url extends \blitz\vendor\core\Helpers {
 
     public static function to($to = 'home', $params = []) {
+        
         $r = self::urlApp() . '/' . $to;
+        
+        $isFirst = true;
+        
         foreach ($params as $key => $val) {
-            $r .= "&{$key}={$val}";
+            if ($isFirst) {
+				$isFirst = false;
+				$r .= "?{$key}={$val}";
+			} else {
+				$r .= "&{$key}={$val}";
+			}
+            
         }
+        
         return $r;
+    
     }
 
     /**
@@ -39,9 +51,13 @@ class Url extends \blitz\vendor\core\Helpers {
      * @return type
      */
     public static function converterUrl($content) {
+    
         $content = self::auxConverter(self::urlApp(), $content, [ '{url}', '{app}', '{home}', '{link}']);
+    
         $content = self::auxConverter(self::urlApp() . '/app/views/assets', $content, '{assets}');
+    
         return $content;
+    
     }
 
     private static function auxConverter($to, $content, $from = array()) {
