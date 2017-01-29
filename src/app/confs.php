@@ -32,10 +32,12 @@
         //'blog'
         //'admin'
 ];
-\blitz\vendor\Bootstrap::$settings['db']['host']='localhost';
-\blitz\vendor\Bootstrap::$settings['db']['user']='root';
-\blitz\vendor\Bootstrap::$settings['db']['pass']='123';
-\blitz\vendor\Bootstrap::$settings['db']['name']='testes_blitz';
+\blitz\vendor\Bootstrap::$settings['db']['host'] = 'localhost';
+\blitz\vendor\Bootstrap::$settings['db']['user'] = 'root';
+\blitz\vendor\Bootstrap::$settings['db']['pass'] = '123';
+\blitz\vendor\Bootstrap::$settings['db']['name'] = 'testes_blitz';
+\blitz\vendor\Bootstrap::$settings['db']['driver'] = 'mysql';
+\blitz\vendor\Bootstrap::$settings['db']['charset'] = 'utf8';
 
 /**
  * Enable if you use specific lib

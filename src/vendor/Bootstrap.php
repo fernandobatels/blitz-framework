@@ -26,92 +26,36 @@ namespace blitz\vendor;
 class Bootstrap {
 
     public static $version = '3.1.1';
-
-    public function start() {
-		
-        $this->loadConfs();
-        $this->loadLibs();
-        $this->loadCore();
-        $this->runLang();
-        $this->runRouter();
-
-    }
-
-    /**
-     * Call controller and action
-     * @param type $name
-     * @param type $action
-     */
-    private function callController($name, $action = null, $dataInput = []) {
-        $name = \ucfirst($name);
-        $src = self::$settings['app_src'] . '/controllers/' . $name . '.php';
-        if (file_exists($src)) {
-            require $src;
-            if ($action === null) {
-                $action = 'index';
-            }
-            $action = 'action' . ucfirst($action);
-
-            $obj = new \ReflectionClass("blitz\\app\\controllers\\{$name}");
-            if ($obj->hasMethod($action) !== true) {
-                echo "Sorry, but {$action} method not found in {$name} controller :(";
-                exit();
-            } else {
-                try {
-                    $met = $obj->getMethod($action);
-
-                    $met->invoke($obj->newInstance(), $dataInput);
-                } catch (Exception $exc) {
-                    echo $exc->getTraceAsString();
-                }
-            }
-        } else {
-            echo "Sorry, but {$name} controller not found :(";
-            exit();
-        }
-    }
-
+	/**
+	 * Router instance
+	 */
     private $router;
-
-    private function runRouter() {
-        $this->router = new \Bramus\Router\Router();
-
-        require self::$settings['app_src'] . '/routs.php';
-        $this->router->run();
-    }
-
-    private function loadCore() {
-        require Bootstrap::$settings['vendor_src'] . '/core/Helpers.php';
-        $this->loadHelpers();
-        require Bootstrap::$settings['vendor_src'] . '/core/Model.php';
-        require Bootstrap::$settings['vendor_src'] . '/core/ModelDatabase.php';
-        require Bootstrap::$settings['vendor_src'] . '/core/Controller.php';
-    }
-
-    private function loadHelpers() {
-        foreach (Bootstrap::$settings['vendor_helpers'] as $helper) {
-            $src = Bootstrap::$settings['vendor_src'] . '/core/helpers/' . $helper . '.php';
-            $this->loadHelper($src, $helper);
-        }
-        foreach (Bootstrap::$settings['app_helpers'] as $helper) {
-            $src = Bootstrap::$settings['app_src'] . '/helpers/' . $helper . '.php';
-            $this->loadHelper($src, $helper);
-        }
-    }
-
-    private function loadHelper($src, $helper) {
-        if (file_exists($src)) {
-            require $src;
-        } else {
-            echo "Sorry, but {$helper} helper not found :(";
-            exit();
-        }
-    }
-
-    private function loadConfs() {
-        require Bootstrap::$settings['app_src'] . '/confs.php';
-    }
-
+    /**
+     * Default lang
+     */
+    private static $langWords = [
+        'admin' => [
+            'en' => [
+            ],
+            'pt-br' => [
+            ]
+        ],
+        'index' => [
+            'en' => [
+            ],
+            'pt-br' => [
+            ]
+        ],
+        'blog' => [
+            'en' => [
+            ],
+            'pt-br' => [
+            ]
+        ]
+    ];
+    /**
+     * Default settings
+     */
     public static $settings = [
         'db' => [
             'driver' => 'mysql',
@@ -173,39 +117,120 @@ class Bootstrap {
         ]
     ];
 
-    private function runLang() {
-        
-        if (file_exists(self::$settings['app_src'] . '/lang.php')) {
-            require self::$settings['app_src'] . '/lang.php';
-        }
-    }
-
-    private static $langWords = [
-        'admin' => [
-            'en' => [
-            ],
-            'pt-br' => [
-            ]
-        ],
-        'index' => [
-            'en' => [
-            ],
-            'pt-br' => [
-            ]
-        ],
-        'blog' => [
-            'en' => [
-            ],
-            'pt-br' => [
-            ]
-        ]
-    ];
-
     /**
      * Default lang app
      * @var type 
      */
     private static $lang = 'pt-br';
+    
+    public function start() {
+		
+        $this->loadConfs();
+        $this->loadLibs();
+        $this->loadCore();
+        $this->loadLang();
+        $this->runRouter();
+
+    }
+
+    /**
+     * Call controller and action. Used by router
+     * @param type $name
+     * @param type $action
+     */
+    private function callController($name, $action = null, $dataInput = []) {
+        $name = \ucfirst($name);
+        $src = self::$settings['app_src'] . '/controllers/' . $name . '.php';
+        if (file_exists($src)) {
+            require $src;
+            if ($action === null) {
+                $action = 'index';
+            }
+            $action = 'action' . ucfirst($action);
+
+            $obj = new \ReflectionClass("blitz\\app\\controllers\\{$name}");
+            if ($obj->hasMethod($action) !== true) {
+                echo "Sorry, but {$action} method not found in {$name} controller :(";
+                exit();
+            } else {
+                try {
+                    $met = $obj->getMethod($action);
+
+                    $met->invoke($obj->newInstance(), $dataInput);
+                } catch (Exception $exc) {
+                    echo $exc->getTraceAsString();
+                }
+            }
+        } else {
+            echo "Sorry, but {$name} controller not found :(";
+            exit();
+        }
+    }
+
+	/**
+	 * Call and run router file
+	 */
+    private function runRouter() {
+        $this->router = new \Bramus\Router\Router();
+
+        require self::$settings['app_src'] . '/routs.php';
+        $this->router->run();
+    }
+
+	/**
+	 * Load source core from framework
+	 */
+    private function loadCore() {
+        require Bootstrap::$settings['vendor_src'] . '/core/Helpers.php';
+        $this->loadHelpers();
+        require Bootstrap::$settings['vendor_src'] . '/core/Model.php';
+        require Bootstrap::$settings['vendor_src'] . '/core/ModelDatabase.php';
+        require Bootstrap::$settings['vendor_src'] . '/core/Controller.php';
+    }
+    
+	/**
+	 * Load core and app helpers
+	 */ 
+    private function loadHelpers() {
+        foreach (Bootstrap::$settings['vendor_helpers'] as $helper) {
+            $src = Bootstrap::$settings['vendor_src'] . '/core/helpers/' . $helper . '.php';
+            $this->loadHelper($src, $helper);
+        }
+        foreach (Bootstrap::$settings['app_helpers'] as $helper) {
+            $src = Bootstrap::$settings['app_src'] . '/helpers/' . $helper . '.php';
+            $this->loadHelper($src, $helper);
+        }
+    }
+
+	/**
+	 * Load helper file
+	 */
+    private function loadHelper($src, $helper) {
+        if (file_exists($src)) {
+            require $src;
+        } else {
+            echo "Sorry, but {$helper} helper not found :(";
+            exit();
+        }
+    }
+
+	/**
+	 * Load file configuration app
+	 */
+    private function loadConfs() {
+        require Bootstrap::$settings['app_src'] . '/confs.php';
+    }
+
+	/**
+	 * Load file lang app
+	 */
+    private function loadLang() {
+        if (file_exists(self::$settings['app_src'] . '/lang.php')) {
+            require self::$settings['app_src'] . '/lang.php';
+        }
+    }
+
+
 
     /**
      * Get list words from file internationalization
@@ -254,6 +279,9 @@ class Bootstrap {
         }
     }
 
+	/**
+	 * Load file lib infos. This file provide integration with lib 
+	*/
     private function loadLib($src, $lib) {
         if (file_exists($src)) {
             $src .= '/infos.php';

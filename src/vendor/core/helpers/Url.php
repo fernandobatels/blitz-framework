@@ -25,6 +25,9 @@ namespace blitz\vendor\core\helpers;
  */
 class Url extends \blitz\vendor\core\Helpers {
 
+	/**
+	 * Build and return url internal link
+	 */
     public static function to($to = 'home', $params = []) {
         
         $r = self::urlApp() . '/' . $to;
@@ -63,7 +66,10 @@ class Url extends \blitz\vendor\core\Helpers {
     private static function auxConverter($to, $content, $from = array()) {
         return str_replace($from, $to, $content);
     }
-
+    
+	/**
+	 * Return url app
+	 */
     public static function urlApp() {
         return \blitz\vendor\Bootstrap::$settings['app']['url'];
     }

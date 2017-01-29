@@ -27,6 +27,7 @@ abstract class Controller {
 
     private $inputObj;
     private $inputType;
+    private static $session;
 
     /**
      * Start process to safe input data
@@ -134,8 +135,6 @@ abstract class Controller {
         }
     }
 
-    private static $session;
-
     /**
      * Check if request input is ajax
      * @return boolean
@@ -226,7 +225,7 @@ abstract class Controller {
     }
 
     /**
-     * 
+     * Redirect to external site link
      * @param type $to
      * @param type $params
      */
@@ -252,34 +251,37 @@ abstract class Controller {
     }
 
     /**
-     * 
-     * @param type $data
+     * Write data output in json format
+     * @param array $data
      */
     protected function outputJson($data = []) {
         self::output($this->applyToUrl(json_encode($data)), 'application/json', 200, false);
     }
 
     /**
-     * 
-     * @param type $data
+     * Write data output in text format
+     * @param string $data
      */
     protected function outputTxt($data = '') {
         self::output($this->applyToUrl($data), 'text/plain', 200, false);
     }
 
     /**
-     * 
-     * @param type $content
-     * @return type
+     * Replace all ocurrences from specific tags in text
+     * @param string $content
+     * @return string
      */
     protected function applyToUrl($content) {
         return \blitz\vendor\core\helpers\Url::converterUrl($content);
     }
 
     /**
+     * Write data output in html format with a engine template
      * 
-     * @param type $page
-     * @param type $data
+     * @param string $page
+     * @param array $data
+     * @param int $codeHttp
+     * @param boolean $allowMinify
      */
     protected function outputPage($page = 'home', $data = [], $codeHttp = 200, $allowMinify = true) {
         $templates = new \League\Plates\Engine(\blitz\vendor\Bootstrap::$settings['app_src'] . '/views/templates');

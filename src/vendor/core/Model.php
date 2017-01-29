@@ -150,14 +150,14 @@ abstract class Model {
     /**
      * Make folders
      */
-    protected function mkdirs($src, $mode = 0777) {
+    protected function mkdirs($src, $mode = 0760) {
         mkdir($src, $mode);
     }
 
     /**
      * Make folders in private folder app
      */
-    protected function mkdirsPrivate($src, $mode = 0777) {
+    protected function mkdirsPrivate($src, $mode = 0760) {
         $this->mkdirs(\blitz\vendor\Bootstrap::$settings['storage_src'] . '/private/' . $src, $mode);
     }
 
@@ -166,7 +166,7 @@ abstract class Model {
      * @param type $src
      * @param type $mode
      */
-    protected function mkdirsPublic($src, $mode = 0777) {
+    protected function mkdirsPublic($src, $mode = 0760) {
         $this->mkdirs(\blitz\vendor\Bootstrap::$settings['storage_src'] . '/public/' . $src, $mode);
     }
 
