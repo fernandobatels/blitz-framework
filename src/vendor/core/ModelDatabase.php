@@ -33,14 +33,20 @@ abstract class ModelDatabase extends Model {
 
     public function __construct() {
 		if (!isset(self::$conn)) {
+            $confs = \blitz\vendor\Bootstrap::$settings['db'];
+		
 			self::$conn = new \database\DB(
-				\blitz\vendor\Bootstrap::$settings['db']['driver'] .
-				':host=' . \blitz\vendor\Bootstrap::$settings['db']['host'] .
-				";dbname=" . \blitz\vendor\Bootstrap::$settings['db']['name'] .
-				';charset=' . \blitz\vendor\Bootstrap::$settings['db']['charset'],
-				\blitz\vendor\Bootstrap::$settings['db']['user'],
-				\blitz\vendor\Bootstrap::$settings['db']['pass']
+				$confs['dns'],
+				$confs['user'],
+				$confs['pass']
 			);
+			
+			if($confs['attributes'] !== null) {
+                foreach($confs['attributes'] as $k => $v) {
+                    self::$conn->setAttribute($k, $v);
+                }
+			
+			}
 		}
     }
 
