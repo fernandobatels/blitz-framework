@@ -27,6 +27,3 @@ Small Framework PHP
 
 ## Author:
 	* Fernando Batels <luisfbatels@gmail.com>
-
-## License:
-	* GNU GENERAL PUBLIC LICENSE 3
