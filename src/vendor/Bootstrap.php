@@ -12,49 +12,15 @@ namespace blitz\vendor;
  */
 class Bootstrap {
 
-    public static $version = '3.1.1';
 	/**
 	 * Router instance
 	 */
     private $router;
-    /**
-     * Default lang
-     */
-    private static $langWords = [
-        'admin' => [
-            'en' => [
-            ],
-            'pt-br' => [
-            ]
-        ],
-        'index' => [
-            'en' => [
-            ],
-            'pt-br' => [
-            ]
-        ],
-        'blog' => [
-            'en' => [
-            ],
-            'pt-br' => [
-            ]
-        ]
-    ];
+    
     /**
      * Default settings
      */
     public static $settings = [
-        'db' => [
-            'driver' => 'mysql',
-            'charset' => 'utf8',
-            'host' => 'localhost',
-            'user' => 'root',
-            'pass' => '123',
-            'name' => ''
-        ],
-        'groups_views' => [
-			'index'
-        ],
         'use_http_encoding_gzip' => false,
         'use_http_output_minify' => false,
         'root_src' => '',
@@ -103,19 +69,12 @@ class Bootstrap {
             500 => 'Internal Server Error', 501 => 'Not Implemented', 502 => 'Bad Gateway', 503 => 'Service Unavailable', 504 => 'Gateway Timeout', 505 => 'HTTP Version Not Supported', 506 => 'Variant Also Negotiates', 507 => 'Insufficient Storage', 510 => 'Not Extended'
         ]
     ];
-
-    /**
-     * Default lang app
-     * @var type 
-     */
-    private static $lang = 'pt-br';
     
     public function start() {
 		
         $this->loadConfs();
         $this->loadLibs();
         $this->loadCore();
-        $this->loadLang();
         $this->runRouter();
 
     }
@@ -179,26 +138,36 @@ class Bootstrap {
 	 * Load core and app helpers
 	 */ 
     private function loadHelpers() {
+        
         foreach (Bootstrap::$settings['vendor_helpers'] as $helper) {
             $src = Bootstrap::$settings['vendor_src'] . '/core/helpers/' . $helper . '.php';
             $this->loadHelper($src, $helper);
         }
+        
         foreach (Bootstrap::$settings['app_helpers'] as $helper) {
             $src = Bootstrap::$settings['app_src'] . '/helpers/' . $helper . '.php';
             $this->loadHelper($src, $helper);
         }
+
     }
 
 	/**
 	 * Load helper file
 	 */
     private function loadHelper($src, $helper) {
+        
         if (file_exists($src)) {
+        
             require $src;
+        
         } else {
+        
             echo "Sorry, but {$helper} helper not found :(";
+        
             exit();
+        
         }
+
     }
 
 	/**
@@ -206,48 +175,6 @@ class Bootstrap {
 	 */
     private function loadConfs() {
         require Bootstrap::$settings['app_src'] . '/confs.php';
-    }
-
-	/**
-	 * Load file lang app
-	 */
-    private function loadLang() {
-        if (file_exists(self::$settings['app_src'] . '/lang.php')) {
-            require self::$settings['app_src'] . '/lang.php';
-        }
-    }
-
-
-
-    /**
-     * Get list words from file internationalization
-     * @param type $group
-     */
-    public static function words($group) {
-        $gr = self::$langWords[$group];
-        if (isset($gr)) {
-            $lang = $gr[self::$lang];
-            if (isset($lang)) {
-                return $lang;
-            }
-        }
-        return [];
-    }
-
-    /**
-     * Set default lang internationalization
-     * @param type $lang
-     */
-    public static function setCurrentLang($lang) {
-        self::$lang = $lang;
-    }
-
-    /**
-     * Get default lang internationalization
-
-     */
-    public static function getCurrentLang() {
-        return self::$lang;
     }
 
     /**

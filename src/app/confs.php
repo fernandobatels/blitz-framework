@@ -8,22 +8,17 @@
     'name' => 'Blitz Framework',
     'author' => 'Fernando Batels',
     'author_email' => 'luisfbatels@gmail.com',
-    'url' => 'http://localhost/blitz-framework-3.0'
+    'url' => 'http://localhost/blitz-framework'
 ];
 
 
 \blitz\vendor\Bootstrap::$settings['use_http_encoding_gzip'] = true;
 \blitz\vendor\Bootstrap::$settings['use_http_output_minify'] = true;
-\blitz\vendor\Bootstrap::$settings['groups_views'] = [
-    'index',
-        //'blog'
-        //'admin'
-];
 
 //Data Source Name(http://php.net/manual/pt_BR/pdo.construct.php)
 \blitz\vendor\Bootstrap::$settings['db']['dns'] = 'mysql:host=localhost;dbname=testes_blitz;charset=utf8';
 \blitz\vendor\Bootstrap::$settings['db']['user'] = 'root';
-\blitz\vendor\Bootstrap::$settings['db']['pass'] = '123';
+\blitz\vendor\Bootstrap::$settings['db']['pass'] = '12345678';
 //http://php.net/manual/pt_BR/pdo.setattribute.php
 \blitz\vendor\Bootstrap::$settings['db']['attributes'] = [
     //PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

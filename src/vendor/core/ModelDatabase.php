@@ -38,23 +38,22 @@ abstract class ModelDatabase extends Model {
     }
 
     /**
-     * Default table name
-     * @return string
-     */
-    protected function nameTable() {
-        return "";
-    }
-
-    /**
      * Insert row data in database
      * @param type $data
      * @param type $specificTable
      */
-    protected function insert($data = [], $specificTable = null) {
-        if ($specificTable === null) {
-            $specificTable = $this->nameTable();
+    protected function insertAux($table, $data = []) {
+
+        try {
+            self::$conn->insert($table, $data);
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e);
         }
-        self::$conn->insert($specificTable, $data);
+        
+        return false;
+
     }
 
     /**
@@ -64,11 +63,18 @@ abstract class ModelDatabase extends Model {
      * @param type $dataToWhere
      * @param type $specificTable
      */
-    protected function update($data = [], $where = null, $dataToWhere = [], $specificTable = null) {
-        if ($specificTable === null) {
-            $specificTable = $this->nameTable();
+    protected function updateAux($table, $data = [], $where = null, $dataToWhere = []) {
+
+
+        try {
+            self::$conn->update($table, $data, $where, $dataToWhere);
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e);
         }
-        self::$conn->update($specificTable, $data, $where, $dataToWhere);
+        
+        return false;
     }
 
     /**
@@ -77,11 +83,17 @@ abstract class ModelDatabase extends Model {
      * @param type $dataToWhere
      * @param type $specificTable
      */
-    protected function delete($where, $dataToWhere = [], $specificTable = null) {
-        if ($specificTable === null) {
-            $specificTable = $this->nameTable();
+    protected function deleteAux($table, $where, $dataToWhere = []) {
+
+        try {
+            self::$conn->delete($table, $where, $dataToWhere);
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e);
         }
-        self::$conn->delete($specificTable, $where, $dataToWhere);
+        
+        return false;
     }
 
     /**
@@ -92,7 +104,17 @@ abstract class ModelDatabase extends Model {
      * @param type $primaryKey
      * @param type $specificTable
      */
-    protected function save($data = [], $primaryKey = 'id', $specificTable = null) {
+    protected function saveAux($table, $data = [], $primaryKey = 'id') {
+
+        try {
+            self::$conn->save($table, $data, $primaryKey);
+
+            return true;
+        } catch (\Exception $e) {
+            error_log($e);
+        }
+        
+        return false;
         if ($specificTable === null) {
             $specificTable = $this->nameTable();
         }
@@ -100,50 +122,10 @@ abstract class ModelDatabase extends Model {
     }
 
     /**
-     * Count rows in one table 
-     * @param type $where
-     * @param type $dataToWhere
-     * @param type $specificTable
-     * @return type
+     * Provide access to connecton object
      */
-    protected function count($where = null, $dataToWhere = [], $specificTable = null) {
-        if ($specificTable === null) {
-            $specificTable = $this->nameTable();
-        }
-        return self::$conn->count($specificTable, $where, $dataToWhere);
-    }
-
-    /**
-     * Get Database Query Builder
-     * @param type $statement
-     * @param type $specificTable
-     * @return type
-     */
-    protected function select($statement = '*', $specificTable = null) {
-        if ($specificTable === null) {
-            $specificTable = $this->nameTable();
-        }
-        return self::$conn->select($statement)->from($specificTable);
-    }
-
-    /**
-     * Execute an SQL statement and return the number of affected rows
-     * @param type $statement
-     * @return type
-     */
-    protected function exec($statement) {
-
-        return self::$conn->exec($statement);
-    }
-
-    /**
-     * Prepare & execute query with params
-     * 
-     * @param type $sql
-     * @return type
-     */
-    protected function execQuery($sql) {
-        return self::$conn->execQueryString($sql);
+    protected function getConn() {
+        return self::$conn;
     }
 
 }

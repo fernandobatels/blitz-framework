@@ -145,7 +145,7 @@ abstract class Controller {
             ob_start();
         }
         
-        header('X-Powered-By: Blitz Framework ' . \blitz\vendor\Bootstrap::$version . ' - ' . \blitz\vendor\Bootstrap::$settings['app']['author']);
+        header('X-Powered-By: Blitz Framework ' . \blitz\vendor\Bootstrap::$settings['app']['author']);
         header('Expires: max-age=0');
         header('Cache-Control: no-cache, no-store, must-revalidate');
         header('Pragma: no-cache');
@@ -156,7 +156,7 @@ abstract class Controller {
             header("Content-type: {$type}; charset=UTF-8");
         }
         
-        header($_SERVER['SERVER_PROTOCOL'] . ' ' . $codeHttp . ' ' . \blitz\vendor\Bootstrap::$settings['http_code_list'][$codeHttp] . ' - Blitz Framework  ' . \blitz\vendor\Bootstrap::$version, true, $codeHttp);
+        header($_SERVER['SERVER_PROTOCOL'] . ' ' . $codeHttp . ' ' . \blitz\vendor\Bootstrap::$settings['http_code_list'][$codeHttp] . ' - Blitz Framework', true, $codeHttp);
         
         if ($content !== null) {
             
@@ -274,9 +274,11 @@ abstract class Controller {
         $templates = new \League\Plates\Engine(\blitz\vendor\Bootstrap::$settings['app_src'] . '/views/templates');
 
         $templates->loadExtension(new \League\Plates\Extension\Asset(\blitz\vendor\Bootstrap::$settings['app_src'] . '/views/assets', true));
-        foreach (\blitz\vendor\Bootstrap::$settings['groups_views'] as $key) {
-            $templates->addFolder($key, \blitz\vendor\Bootstrap::$settings['app_src'] . '/views/pages/' . $key . '/');
+        
+        foreach (glob(\blitz\vendor\Bootstrap::$settings['app_src'] . '/views/pages/*' , GLOB_ONLYDIR) as $key) {
+            $templates->addFolder(basename($key), $key);
         }
+
         self::output($this->applyToUrl($templates->render($page, $data)),'text/html', $codeHttp, $allowMinify);
     }
 

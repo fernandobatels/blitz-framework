@@ -23,7 +23,7 @@ abstract class Model {
         $src = \blitz\vendor\Bootstrap::$settings['app_src'] . '/models/' . $name . '.php';
         if (file_exists($src)) {
 
-            require $src;
+            require_once $src;
         } else {
             echo "Sorry, but {$name} model not found :(";
             exit();

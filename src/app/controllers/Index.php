@@ -1,15 +1,10 @@
 <?php
 
-/*
- * This file is part of the Blitz package.
- *
- * (c) 2016 Fernando Batels
-
- */
-
 namespace blitz\app\controllers;
 
-\blitz\vendor\core\Model::import('cliente');
+
+\blitz\vendor\core\Model::import('Post');
+use \blitz\app\models\Post as Post;
 
 /**
  * @author Fernando Batels <luisfbatels@gmail.com>
@@ -17,8 +12,28 @@ namespace blitz\app\controllers;
 class Index extends \blitz\vendor\core\Controller {
 
     public function actionIndex() {
-        new \blitz\app\models\Cliente();
         $this->outputPage('index::default');
     }
+
+    public function actionPosts() {
+        $post = new Post();
+
+        $this->outputPage('index::posts', [
+            'list' => $post->list()
+        ]);
+    }
+
+
+    public function actionPost($id) {
+        $post = new Post();
+        
+        $post->id = $id;
+
+        $this->outputPage('index::post', [
+            'infos' => $post->infos()
+        ]);
+    }
+
+
 
 }

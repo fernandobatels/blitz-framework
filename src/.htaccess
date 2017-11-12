@@ -60,6 +60,7 @@ RewriteEngine On
 # Allow access to assets folder from plugins folders
 RewriteRule ^app/views/assets - [L]
 RewriteRule ^app/storage/public - [L]
+RewriteRule ^.well-known - [L]
 
 # forbid access to files and folders under app and vendor
 RewriteRule ^app/.*$ - [L,F]

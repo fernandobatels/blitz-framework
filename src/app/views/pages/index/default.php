@@ -1,5 +1,6 @@
 <?php $this->layout('default') ?>
 
-<ul>
-    <li ><a href="{url}?nome=fernando">Home</a></li>
-</ul>
+
+<h1>Blitz framework</h1>
+
+<a href="https://github.com/FernandoBatels/blitz-framework">Github</a>

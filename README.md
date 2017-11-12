@@ -6,9 +6,6 @@ Small Framework PHP
 	* One small alternative framework to small and light projects.
 	
 
-## Version:
-	* 3.1
-
 ## Features:
 	[x] Router (https://github.com/bramus/router)
 	[x] Session (https://github.com/Bistro/session)
@@ -17,7 +14,6 @@ Small Framework PHP
 	[x] Validation Input Data (https://github.com/Wixel/GUMP)
 	[x] MVC
 	[x] Confs file
-	[x] Lang file
 	[x] Easy support custom helpers
 	[x] Controller with support many output's formats data (json, html, plain....)
 
