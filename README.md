@@ -7,15 +7,15 @@ Small Framework PHP
 	
 
 ## Features:
-	[x] [Router](https://github.com/bramus/router)
-	[x] [Session](https://github.com/Bistro/session)
-	[x] [Database](https://github.com/salebab/database)
-	[x] [Template](https://github.com/thephpleague/plates)
-	[x] [Validation Input Data](https://github.com/Wixel/GUMP)
-	[x] MVC
-	[x] Confs file
-	[x] Easy support custom helpers
-	[x] Controller with support many output's formats data (json, html, plain....)
+	* [Router](https://github.com/bramus/router)
+	* [Session](https://github.com/Bistro/session)
+	* [Database](https://github.com/salebab/database)
+	* [Template](https://github.com/thephpleague/plates)
+	* [Validation Input Data](https://github.com/Wixel/GUMP)
+	* MVC
+	* Confs file
+	* Easy support custom helpers
+	* Controller with support many output's formats data (json, html, plain....)
 
 ## Requisites:
 	* PHP 5.3 >=
