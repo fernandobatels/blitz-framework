@@ -17,6 +17,7 @@ namespace blitz\vendor\core;
 abstract class ModelDatabase extends Model {
 
     private static $conn;
+    private static $isFirebird = false;
 
     public function __construct() {
 		if (!isset(self::$conn)) {
@@ -32,9 +33,10 @@ abstract class ModelDatabase extends Model {
                 foreach($confs['attributes'] as $k => $v) {
                     self::$conn->setAttribute($k, $v);
                 }
-			
-			}
-		}
+            }
+
+            self::$isFirebird = strpos(\blitz\vendor\Bootstrap::$settings['db'], 'firebird') !== false;
+        }
     }
 
     /**
@@ -45,7 +47,24 @@ abstract class ModelDatabase extends Model {
     protected function insertAux($table, $data = []) {
 
         try {
-            self::$conn->insert($table, $data);
+
+            if (self::$isFirebird) {
+
+                $keys = implode(',',array_keys($data));
+                
+                $vals1 = (count($data) > 0 ? str_repeat(' ?,', count($data) - 1) : '') . ' ?';
+                
+                $vals2 = array_values($data);
+                
+                $sql = "insert into {$table} ({$keys}) values ({$vals1})";
+
+                self::$conn->execQueryString($sql, $vals2);
+
+            } else {
+                
+                self::$conn->insert($table, $data);
+
+            }
 
             return true;
         } catch (\Exception $e) {
@@ -67,7 +86,29 @@ abstract class ModelDatabase extends Model {
 
 
         try {
-            self::$conn->update($table, $data, $where, $dataToWhere);
+            if (self::$isFirebird) {
+
+
+                $keys = implode(' = ?,', array_keys($data)) . ' = ?';
+
+                $params = array_values($data);
+                
+                $sql = "update {$table} set {$keys}";
+
+                if (!is_null($where) && count($dataToWhere) > 0) {
+                    $params = array_merge($params, array_values($dataToWhere));
+            
+                    $sql .= " where {$where}";
+                }
+
+
+                self::$conn->execQueryString($sql, $params);
+
+            } else {
+
+                self::$conn->update($table, $data, $where, $dataToWhere);
+
+            }
 
             return true;
         } catch (\Exception $e) {
