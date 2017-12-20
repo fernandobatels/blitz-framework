@@ -45,8 +45,11 @@
 ];
 
 
-setlocale(LC_MONETARY,"pt_BR");
-//~ ini_set("display_errors", "1");
-error_reporting(E_ALL);
-//~ error_reporting(0);
 
+setlocale(LC_MONETARY, "pt_BR");
+date_default_timezone_set('America/Sao_Paulo');
+
+ini_set("display_errors", false);
+
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+//error_reporting(0);
