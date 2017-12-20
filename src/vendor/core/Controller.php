@@ -14,7 +14,7 @@ abstract class Controller {
 
     private $inputObj;
     private $inputType;
-    private static $session;
+    private $session;
 
     /**
      * Start process to safe input data
@@ -84,8 +84,9 @@ abstract class Controller {
      * @param type $name
      * @return type
      */
-    public static function sessionHas($name) {
-        return self::sessionGet($name) !== null;
+    public function sessionHas($name) {
+        $this->auxSession();
+        return $this->sessionGet($name) !== null;
     }
 
     /**
@@ -94,8 +95,8 @@ abstract class Controller {
      * @return type
      */
     protected function sessionGet($name) {
-        self::auxSession();
-        return self::$session->get($name);
+        $this->auxSession();
+        return $this->session->get($name);
     }
 
     /**
@@ -104,21 +105,21 @@ abstract class Controller {
      * @param type $val
      */
     protected function sessionSet($name, $val) {
-        self::auxSession();
-        self::$session->set($name, $val);
+        $this->auxSession();
+        $this->session->set($name, $val);
     }
 
     /**
      * Destroy session
      */
     protected function sessionDestroy() {
-        self::auxSession();
-        self::$session->destroy();
+        $this->auxSession();
+        $this->session->destroy();
     }
 
     private function auxSession() {
-        if (self::$session === null) {
-            self::$session = new \Bistro\Session\Native;
+        if ($this->session === null) {
+            $this->session = new \Bistro\Session\Native;
         }
     }
 
@@ -139,7 +140,7 @@ abstract class Controller {
      */
     public static function output($content, $type = 'text/html', $codeHttp = 200, $allowMinify = true) {
 		
-		 if ( \blitz\vendor\Bootstrap::$settings['use_http_encoding_gzip'] && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+        if ( \blitz\vendor\Bootstrap::$settings['use_http_encoding_gzip'] && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
             ob_start("ob_gzhandler");
         } else {
             ob_start();

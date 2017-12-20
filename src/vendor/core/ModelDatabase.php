@@ -20,22 +20,22 @@ abstract class ModelDatabase extends Model {
     private static $isFirebird = false;
 
     public function __construct() {
-		if (!isset(self::$conn)) {
+        if (!isset(self::$conn)) {
             $confs = \blitz\vendor\Bootstrap::$settings['db'];
 		
-			self::$conn = new \database\DB(
-				$confs['dns'],
-				$confs['user'],
-				$confs['pass']
-			);
+	    self::$conn = new \database\DB(
+		$confs['dns'],
+		$confs['user'],
+		$confs['pass']
+	    );
 			
-			if($confs['attributes'] !== null) {
+	    if($confs['attributes'] !== null) {
                 foreach($confs['attributes'] as $k => $v) {
                     self::$conn->setAttribute($k, $v);
                 }
             }
 
-            self::$isFirebird = strpos(\blitz\vendor\Bootstrap::$settings['db'], 'firebird') !== false;
+            self::$isFirebird = strpos($confs['dns'], 'firebird') !== false;
         }
     }
 
