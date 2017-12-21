@@ -14,7 +14,7 @@ abstract class Controller {
 
     private $inputObj;
     private $inputType;
-    private $session;
+    private static $session;
 
     /**
      * Start process to safe input data
@@ -96,7 +96,7 @@ abstract class Controller {
      */
     protected function sessionGet($name) {
         $this->auxSession();
-        return $this->session->get($name);
+        return self::$session->get($name);
     }
 
     /**
@@ -106,7 +106,7 @@ abstract class Controller {
      */
     protected function sessionSet($name, $val) {
         $this->auxSession();
-        $this->session->set($name, $val);
+        self::$session->set($name, $val);
     }
 
     /**
@@ -114,12 +114,12 @@ abstract class Controller {
      */
     protected function sessionDestroy() {
         $this->auxSession();
-        $this->session->destroy();
+        self::$session->destroy();
     }
 
     private function auxSession() {
-        if ($this->session === null) {
-            $this->session = new \Bistro\Session\Native;
+        if (self::$session === null) {
+            self::$session = new \Bistro\Session\Native;
         }
     }
 
